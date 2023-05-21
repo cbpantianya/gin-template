@@ -1,0 +1,12 @@
+# 请修改该配置文件，并将配置文件的名字改为config.toml
+[HTTPServer]
+host = "0.0.0.0"   # 服务器监听IP，默认localhost
+port = 8080        # 服务器监听端口，默认8080
+
+[MySQL]
+host = "localhost" 
+port = 3306
+user = "XXXX"
+password = "XXXXXXXX"
+database = "XXXXXXXX"
+
