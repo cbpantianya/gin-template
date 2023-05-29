@@ -17,7 +17,7 @@ func init() {
 
 func (p *Status)ServiceInfo() *server.ServiceInfo {
 	return &server.ServiceInfo{
-        ID: "PING",
+        ID: "Status",
 		Inst: instance,
     }
 }

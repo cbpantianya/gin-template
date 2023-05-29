@@ -29,7 +29,7 @@ var GConfig Config
 
 func CFInit() {
 	// 解析配置文件
-	_, err := toml.DecodeFile("./config.toml", &GConfig)
+	_, err := toml.DecodeFile("./config/config.toml", &GConfig)
 	if err != nil {
 		// 此时还未初始化日志服务，所以直接输出到控制台
 		panic("Failed to parse config file!")
