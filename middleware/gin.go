@@ -33,3 +33,4 @@ func GinCORS() gin.HandlerFunc {
 		}
 	}
 }
+

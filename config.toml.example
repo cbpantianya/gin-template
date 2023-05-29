@@ -10,3 +10,8 @@ user = "XXXX"
 password = "XXXXXXXX"
 database = "XXXXXXXX"
 
+[Redis]
+host = "localhost" 
+port = 6789
+password = "XXXXXXXX"
+database = 0

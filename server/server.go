@@ -1,11 +1,13 @@
 package server
 
 import (
+	"context"
 	"fmt"
 	"gin-template/v2/middleware"
 	"gin-template/v2/utils"
 
 	"github.com/gin-gonic/gin"
+	"github.com/redis/go-redis/v9"
 	"github.com/rs/zerolog"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -17,6 +19,7 @@ type Server struct {
 	Engine *gin.Engine
 	Logger zerolog.Logger
 	MySQL  *gorm.DB
+	Redis  *redis.Client
 }
 
 func Init() {
@@ -34,6 +37,20 @@ func Init() {
 	if err!= nil {
         S.Logger.Fatal().Err(err).Msg("Failed to connect to mysql")
     }
+	// 连接Redis
+	S.Redis = redis.NewClient(&redis.Options{
+		Addr:     fmt.Sprintf("%s:%d", utils.GConfig.Redis.Host, utils.GConfig.Redis.Port),
+		Password: utils.GConfig.Redis.Password,
+		DB:       utils.GConfig.Redis.Database,
+	})
+
+	// 测试Redis连接
+	err = S.Redis.Ping(context.Background()).Err()
+	if err != nil {
+		S.Logger.Fatal().Err(err).Msg("Failed to connect to redis")
+	}
+
+
 	RegisterService2Server()
 }
 
