@@ -2,7 +2,6 @@ package status
 
 import (
 	"gin-template/v2/server"
-	v1 "gin-template/v2/service/status/v1"
 
 )
 
@@ -28,7 +27,7 @@ func (p* Status)ServiceInit(s *server.Server) error {
 
 func (p* Status)ServiceStart(s *server.Server) error {
 	// 服务状态监测
-	s.Engine.GET("/v1/status",v1.StatusCheck(s))
+	s.Engine.GET("/v1/status",StatusCheck(s))
 	return nil
 }
 
