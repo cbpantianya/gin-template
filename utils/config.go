@@ -5,8 +5,11 @@ import "github.com/BurntSushi/toml"
 type Config struct {
 	// HTTP配置
 	HTTPServer struct {
-		Host             string   // 主机地址
-		Port             int      // 端口
+		Host    string   // 主机地址
+		Port    int      // 端口
+		Origin  []string // 跨域列表
+		Methods []string // 请求方法列表
+		Headers []string // 请求方法列表
 	}
 	// 数据库配置
 	MySQL struct {

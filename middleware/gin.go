@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"fmt"
-
+	"gin-template/v2/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
 )
@@ -21,12 +21,14 @@ func GinLoggerMiddleware(log *zerolog.Logger) gin.HandlerFunc {
 
 func GinCORS() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-		c.Writer.Header().Set("Access-Control-Expose-Headers", "Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type")
-		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+		origin := c.Request.Header.Get("Origin")
+		if IfInOrigin(origin) {
+			c.Writer.Header().Set("Access-Control-Allow-Origin", origin)
+			c.Writer.Header().Set("Vary", "Origin")
+		}
 
+		c.Writer.Header().Set("Access-Control-Allow-Headers", GenerateHeaders())
+		c.Writer.Header().Set("Access-Control-Allow-Methods", GenerateMethods())
 		if c.Request.Method == "OPTIONS" {
 			c.AbortWithStatus(204)
 			return
@@ -34,3 +36,38 @@ func GinCORS() gin.HandlerFunc {
 	}
 }
 
+func IfInOrigin(origin string) bool {
+	if origin == "" {
+		return false
+	}
+	for _, value := range utils.GConfig.HTTPServer.Origin {
+		if origin == value || "*" == value {
+			return true
+		}
+	}
+	return false
+}
+
+func GenerateMethods() string {
+	str := ""
+	for index, value := range utils.GConfig.HTTPServer.Methods {
+		if index == 0 {
+			str = str + value
+		} else {
+			str = str + ", " + value
+		}
+	}
+	return str
+}
+
+func GenerateHeaders() string {
+	str := ""
+	for index, value := range utils.GConfig.HTTPServer.Headers {
+		if index == 0 {
+			str = str + value
+		} else {
+			str = str + ", " + value
+		}
+	}
+	return str
+}
