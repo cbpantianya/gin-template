@@ -9,33 +9,33 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type StatusCheckRespone struct {
+type CheckResponse struct {
 	MySQL bool `json:"mysql"`
 	Redis bool `json:"redis"`
 }
 
-func StatusCheck(s *server.Server) gin.HandlerFunc {
+func Check(s *server.Server) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		var responese StatusCheckRespone
+		var response CheckResponse
 		// 使用自动生成空模板，检查MySQL连接
 		err := s.MySQL.AutoMigrate()
 		if err != nil {
-			responese.MySQL = false
+			response.MySQL = false
 			s.Logger.Error().Msgf("MySQL Connection Error: %v", err)
-		}else {
-			responese.MySQL = true
+		} else {
+			response.MySQL = true
 		}
 
 		// 测试Redis连接
 		err = s.Redis.Set(context.Background(), "connect_test", "1", time.Second).Err()
 		if err != nil {
-			responese.Redis = false
+			response.Redis = false
 			s.Logger.Error().Msgf("Redis Connection Error: %v", err)
-		}else {
-			responese.Redis = true
+		} else {
+			response.Redis = true
 		}
 
-		ctx.JSON(utils.SuccessResp(responese))
+		ctx.JSON(utils.SuccessResp(response))
 
 	}
 }
