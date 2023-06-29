@@ -2,16 +2,36 @@
 [HTTPServer]
 host = "0.0.0.0"   # 服务器监听IP，默认localhost
 port = 8080        # 服务器监听端口，默认8080
+origin = [
+    "*"
+]                  # Origin允许列表
+methods = [
+    "GET",
+    "POST",
+    "OPTIONS",
+    "DELETE"
+]                  # Methods允许列表
+headers = [
+    "Content-Type",
+    "Content-Length",
+    "Accept-Encoding",
+    "X-CSRF-Token",
+    "Authorization",
+    "accept",
+    "origin",
+    "Cache-Control",
+    "X-Requested-With"
+]                  # Headers允许列表
 
 [MySQL]
-host = "localhost" 
+host = "localhost"
 port = 3306
-user = "XXXX"
-password = "XXXXXXXX"
-database = "XXXXXXXX"
+user = "root"
+password = "XXXXXXXXXX"
+database = "XXXXXXXXXX"
 
 [Redis]
-host = "localhost" 
-port = 6789
-password = "XXXXXXXX"
+host = "localhost"
+port = 6379
+password = ""
 database = 0
